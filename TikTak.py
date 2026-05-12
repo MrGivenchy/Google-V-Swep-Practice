@@ -41,34 +41,40 @@ def inCommon(user1: User, userCollection: List[User]):
 
 
 def recommendVideos(userX: User, userCollection: List[User]):
-    similarUsers = []
+    similarUsers = []  # will store (user, similarity score)
 
-    for user in userCollection:
-        if user == userX:
+    for user in userCollection:  # loop through all users
+        if user == userX:  # skip the same user
             continue
 
-        count = 0
-        for vid in userX.likedVids:
-            if vid in user.likedVids:
-                count += 1
+        count = 0  # number of common liked videos
+        for vid in userX.likedVids:  # check each video userX liked
+            if vid in user.likedVids:  # if the other user also liked it
+                count += 1  # increase similarity score
 
-        similarUsers.append((user, count))
+        similarUsers.append((user, count))  # store user and their score
 
-    similarUsers.sort(key=lambda x: x[1], reverse=True)
-    topUsers = [user for user, count in similarUsers[:5]]
+    similarUsers.sort(key=lambda x: x[1], reverse=True)  
+    # sort users by similarity score (highest first)
 
-    recommendations = {}
+    topUsers = [user for user, count in similarUsers[:5]]  
+    # take top 5 most similar users
 
-    for user in topUsers:
-        for vid in user.likedVids:
-            if vid not in userX.viewedVids:
-                if vid not in recommendations:
-                    recommendations[vid] = 0
-                recommendations[vid] += 1
+    recommendations = {}  
+    # dictionary to count how many similar users liked each video
 
-    sortedVids = sorted(recommendations.items(), key=lambda x: x[1], reverse=True)
+    for user in topUsers:  # go through each similar user
+        for vid in user.likedVids:  # check videos they liked
+            if vid not in userX.viewedVids:  # only if userX hasn’t seen it
+                if vid not in recommendations:  # if not already tracked
+                    recommendations[vid] = 0  # start count at 0
+                recommendations[vid] += 1  # increase popularity count
 
-    return [vid for vid, count in sortedVids]
+    sortedVids = sorted(recommendations.items(), key=lambda x: x[1], reverse=True)  
+    # sort videos by how many similar users liked them
+
+    return [vid for vid, count in sortedVids]  
+    # return just the videos (ignore counts)
 
 
 # ---------------- TEST CASES ----------------
