@@ -119,9 +119,7 @@ def page_rank(pages: list[webpage], rounds: int = 10) -> list[webpage]:
     return ranked_pages
 
 
-# -------------------
-# Easy test cases
-# -------------------
+#Test cases
 
 a = webpage(
     "a",
